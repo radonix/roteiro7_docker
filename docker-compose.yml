@@ -4,10 +4,12 @@ services:
     image: ubuntu:latest
     secrets:
     - git_token
+    # Add 'sleep infinity' to keep the container running
     command: >
       bash -c "apt-get update && apt-get install -y git &&
       git config --global user.name 'My Git User' &&
-      git config --global user.token $$(cat /run/secrets/git_token)"  # <--- FIX IS HERE
+      git config --global user.token $$(cat /run/secrets/git_token) &&
+      sleep infinity"  # <--- Keeps the container running
 secrets:
   git_token:
     external: true
