@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  git-config:
+    image: ubuntu:latest
+    # Monta o segredo no contêiner. O Docker Swarm o disponibiliza em /run/secrets/git_token
+    secrets:
+      - git_token
+    command: >
+      bash -c "
+        apt-get update && apt-get install -y git &&
+        git config --global user.name 'My Git User' &&
+        # O token é lido do arquivo montado pelo Swarm Secrets
+        git config --global user.token $(cat /run/secrets/git_token)
+      "
+    deploy: # Configuração de deploy específica para Swarm
+      restart_policy:
+        condition: on-failure
+
+secrets:
+  # Referencia o secret que você criou no Passo 2
+  git_token:
+    external: true
