@@ -7,7 +7,7 @@ services:
     command: >
       bash -c "apt-get update && apt-get install -y git &&
       git config --global user.name 'My Git User' &&
-      git config --global user.token $(cat /run/secrets/git_token)"
+      git config --global user.token $$(cat /run/secrets/git_token)"  # <--- FIX IS HERE
 secrets:
   git_token:
     external: true
