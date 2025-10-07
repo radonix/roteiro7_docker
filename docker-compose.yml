@@ -1,17 +1,13 @@
 version: '3.8'
-
 services:
-  git-config:
-    image: ubuntu:latest
-    secrets:
-      - git_token
-    # Formato simplificado, mais robusto contra erros de parsing do YAML
-    command: >
-      bash -c "apt-get update && apt-get install -y git && git config --global user.name 'My Git User' && git config --global user.token $$(cat /run/secrets/git_token)"
-    deploy:
-      restart_policy:
-        condition: on-failure
-
+git-config:
+image: ubuntu:latest
 secrets:
-  git_token:
-    external: true
+- git_token
+command: >
+bash -c "apt-get update && apt-get install -y git &&
+git config --global user.name 'My Git User' &&
+git config --global user.token $(cat /run/secrets/git_token)"
+secrets:
+git_token:
+external: true
