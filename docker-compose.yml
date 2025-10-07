@@ -5,13 +5,9 @@ services:
     image: ubuntu:latest
     secrets:
       - git_token
+    # Formato simplificado, mais robusto contra erros de parsing do YAML
     command: >
-      bash -c "
-        apt-get update && apt-get install -y git &&
-        git config --global user.name 'My Git User' &&
-        # ESCAPE O $ COM $$. Assim, o Swarm/Compose não tenta interpolar a variável.
-        git config --global user.token $$(cat /run/secrets/git_token)
-      "
+      bash -c "apt-get update && apt-get install -y git && git config --global user.name 'My Git User' && git config --global user.token $$(cat /run/secrets/git_token)"
     deploy:
       restart_policy:
         condition: on-failure
